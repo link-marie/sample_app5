@@ -9,10 +9,12 @@ class UsersController < ApplicationController
     @user = User.new
   end
 
-  # POST アクション
+  # ユーザー登録。POST アクション
   def create
     @user = User.new(user_params)
     if @user.save
+      # Loginする
+      log_in @user
       flash[:success] = "Welcome to the Sample App!"
       redirect_to @user
     else
@@ -22,8 +24,8 @@ class UsersController < ApplicationController
 
   private
 
-    def user_params
-      # Strong Parameters: 指定された項目のみ設定可能
-      params.require(:user).permit(:name, :email, :password, :password_confirmation)
-    end
+  def user_params
+    # Strong Parameters: 指定された項目のみ設定可能
+    params.require(:user).permit(:name, :email, :password, :password_confirmation)
+  end
 end
