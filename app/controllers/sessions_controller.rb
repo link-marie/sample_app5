@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
       # checkboxを確認: checked: 記憶 , unchecked: 消去
       params[:session][:remember_me] == '1' ? remember(@user) : forget(@user)
       # ユーザー情報のページにリダイレクト
-      redirect_to @user
+      redirect_back_or @user
      else
       # flash.now で、レンダリングが終わっているページで特別にフラッシュメッセージを表示
       flash.now[:danger] = 'Invalid email/password combination'
