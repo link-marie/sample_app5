@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
       log_in @user
       # checkboxを確認: checked: 記憶 , unchecked: 消去
       params[:session][:remember_me] == '1' ? remember(@user) : forget(@user)
-      # ユーザー情報のページにリダイレクト
+      # クエストされたURLが存在する場合はそこにリダイレクトし、ない場合は何らかのデフォルトのURLにリダイレクト
       redirect_back_or @user
      else
       # flash.now で、レンダリングが終わっているページで特別にフラッシュメッセージを表示

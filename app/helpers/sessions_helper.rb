@@ -62,6 +62,7 @@ module SessionsHelper
   end
 
   # アクセスしようとしたURLを覚えておく
+  # Loginするときに callして、friendly forwardingに利用する
   def store_location
     session[:forwarding_url] = request.original_url if request.get?
   end
