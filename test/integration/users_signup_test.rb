@@ -1,6 +1,10 @@
 require 'test_helper'
 
 class UsersSignupTest < ActionDispatch::IntegrationTest
+  def setup
+    # 配列deliveriesを初期化
+    ActionMailer::Base.deliveries.clear
+  end
 
   # 無効データを投稿してみて、ユーザ数が変わらないかをチェック
   test "invalid signup information" do
@@ -13,13 +17,12 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     end
     assert_template 'users/new'
     assert_select 'div#error_explanation'
-    assert_select 'div.alert'     
-    # assert_select 'form[action="/signup"]'  # FIXME
-    end
+    assert_select 'div.field_with_errors'
 
+  end
 
   # 新規ユーザ登録 OK ケース
-  test "valid signup information" do
+  test "valid signup information with account activation" do
     get signup_path
     assert_difference 'User.count', 1 do
       post users_path, params: { user: { name:  "Example User",
@@ -27,6 +30,25 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
                                          password:              "password",
                                          password_confirmation: "password" } }
     end
+    
+    # 配信されたメッセージがきっかり1つ
+    assert_equal 1, ActionMailer::Base.deliveries.size
+    # インスタンス変数にアクセスできるようにする
+    user = assigns(:user)
+    # Activation状態をチェック
+    assert_not user.activated?
+    # 有効化していない状態でログインしてみる
+    log_in_as(user)
+    assert_not is_logged_in?
+    # 有効化トークンが不正な場合
+    get edit_account_activation_path("invalid token", email: user.email)
+    assert_not is_logged_in?
+    # トークンは正しいがメールアドレスが無効な場合
+    get edit_account_activation_path(user.activation_token, email: 'wrong')
+    assert_not is_logged_in?
+    # 有効化トークンが正しい場合
+    get edit_account_activation_path(user.activation_token, email: user.email)
+    assert user.reload.activated?
     # POSTリクエストを送信した結果を見て、指定されたリダイレクト先に移動する
     follow_redirect!
     assert_template 'users/show'

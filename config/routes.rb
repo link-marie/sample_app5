@@ -15,4 +15,5 @@ Rails.application.routes.draw do
   patch  '/edit',    to: 'users#update'
   # RESTfulなUsersリソースで必要となるすべてのアクションが利用できるようになる
   resources :users
+  resources :account_activations, only: [:edit]
 end
