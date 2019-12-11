@@ -13,7 +13,12 @@ Rails.application.routes.draw do
   post   '/login',   to: 'sessions#create'
   delete '/logout',  to: 'sessions#destroy'
   patch  '/edit',    to: 'users#update'
+
+#  get 'password_resets/new'
+#  get 'password_resets/edit'
+
   # RESTfulなUsersリソースで必要となるすべてのアクションが利用できるようになる
   resources :users
   resources :account_activations, only: [:edit]
+  resources :password_resets,     only: [:new, :create, :edit, :update]
 end
