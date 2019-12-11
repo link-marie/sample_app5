@@ -14,7 +14,7 @@ class UserMailerTest < ActionMailer::TestCase
     assert_equal "Account activation", mail.subject
     assert_equal [user.email], mail.to
     assert_equal [@senderEmail], mail.from
-    assert_match @greeting, mail.body.encoded
+    assert_match @greeting, mail.body.encoded # これは完全一致のチェックにはなっていない
     assert_match user.name,               mail.body.encoded
     assert_match user.activation_token,   mail.body.encoded
     assert_match CGI.escape(user.email),  mail.body.encoded

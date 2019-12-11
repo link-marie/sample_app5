@@ -2,7 +2,7 @@ require 'test_helper'
 
 class UsersSignupTest < ActionDispatch::IntegrationTest
   def setup
-    # 配列deliveriesを初期化
+    # 配列deliveriesを初期化。他のテストでメールが送られるとエラーになってしまうことを防ぐため。
     ActionMailer::Base.deliveries.clear
   end
 
