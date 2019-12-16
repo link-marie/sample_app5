@@ -11,6 +11,7 @@
   <div class="col-md-8">
     <% if @user.microposts.any? %>
       <h3>Microposts (<%= @user.microposts.count %>)</h3>
+      <!-- 順序付きリスト  -->
       <ol class="microposts">
         <%= render @microposts %>
       </ol>

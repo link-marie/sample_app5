@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  # micropostは userと共に破壊される
   has_many :microposts, dependent: :destroy
   # 仮想の 記憶トークン属性(アクセサ)
   attr_accessor :remember_token, :activation_token, :reset_token

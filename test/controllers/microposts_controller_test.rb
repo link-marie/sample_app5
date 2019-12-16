@@ -8,8 +8,10 @@ class MicropostsControllerTest < ActionDispatch::IntegrationTest
 
   test "should redirect create when not logged in" do
     assert_no_difference 'Micropost.count' do
+      # micropostの投稿を試みる(現在loginしていない)
       post microposts_path, params: { micropost: { content: "Lorem ipsum" } }
     end
+    # loginURL へ リダイレクト
     assert_redirected_to login_url
   end
 
@@ -22,10 +24,14 @@ class MicropostsControllerTest < ActionDispatch::IntegrationTest
 
   test "should redirect destroy for wrong micropost" do
     log_in_as(users(:michael))
+    # login中以外のuserによる micropost生成
     micropost = microposts(:ants)
+    # micropostの数は変化しない
     assert_no_difference 'Micropost.count' do
+      # 自分以外の micropostの削除
       delete micropost_path(micropost)
     end
+    # redirect
     assert_redirected_to root_url
   end
 end
